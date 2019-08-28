@@ -38,7 +38,7 @@ class Bricks():
     the Bricks has 3 values:
         - a numpy array size (4,4) that contains the bricks itself.
         - a (x_coord, y_coord) list that is the top-left coord of the above
-             numpy array.
+            numpy array.
     """
     def __init__(size=()):
         pass

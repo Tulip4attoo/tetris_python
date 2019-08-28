@@ -1,6 +1,13 @@
 import main
+import curses
 
-a = main.Field()
-a.render_field()
+window = curses.initscr()
+curses.noecho()
+window.keypad(True)  # Maybe not perfect, but a good start?
 
-print(a.field_rendered)
+while True:
+    event = window.getch()
+    default_key = "string ne"
+    key = default_key if event == -1 else event
+    print(f'k: {key}')
+    # curses.flushinp()
