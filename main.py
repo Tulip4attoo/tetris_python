@@ -1,17 +1,19 @@
 import numpy as np
 import utils
+import bricks
+import cfg
+import random
 
 
 class Field():
     """
-    the field contains a numpy array.
+    the field contains a numpy array that represents the field.
     """
 
-    def __init__(self, shape=(20, 8)):
+    def __init__(self, shape=cfg.FIELD_SHAPE):
         """
-        default shape is (20,8) # will correct later
+        default shape is (20, 10)
         """
-        print(shape)
         self.field = np.zeros(shape)
         # self.field_rendered = self.render_field()
 
@@ -36,9 +38,23 @@ class Field():
 class Bricks():
     """
     the Bricks has 3 values:
-        - a numpy array size (4,4) that contains the bricks itself.
+        - a dictionary that contains 4 numpy arrays size (4, 4)
+            as the 4 rotation renders of the bricks itself.
         - a (x_coord, y_coord) list that is the top-left coord of the above
             numpy array.
+        - a number that show the rotation of the bricks.
     """
-    def __init__(size=()):
-        pass
+
+    def __init__(self, coord=cfg.DEFAULT_COORD):
+        # init a self.bricks
+        self.bricks = {"bricks": {},
+                       "coord": coord,
+                       "rotation": 0}
+        self.random_brick()
+
+    def random_brick(self):
+        bricks_list = bricks.BRICKS_LIST[:]
+        random_brick = random.choice(bricks_list)
+        self.bricks["bricks"] = random_brick
+        self.bricks["rotation"] = random.choice([0, 1, 2, 3])
+        return self.bricks
