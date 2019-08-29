@@ -58,3 +58,34 @@ class Bricks():
         self.bricks["bricks"] = random_brick
         self.bricks["rotation"] = random.choice([0, 1, 2, 3])
         return self.bricks
+
+    def control_brick(self, key):
+        """
+        this function is to control the bricks, includes rotation= and move
+        key is a number of ord(key)
+        will refactor by adding into a dict of moveset later
+        """
+        if key == ord("w"):
+            self.rotate()
+        elif key == ord("a"):
+            self.move_left()
+        elif key == ord("d"):
+            self.move_right()
+        elif key == ord("s"):
+            self.move_down()
+
+    def rotate(self):
+        """
+        this function is to change the rotation value in self.bricks
+        always turn right aka +1 to the value
+        """
+        self.bricks["rotation"] = (self.bricks["rotation"] + 1) % 4
+
+    def move_left(self):
+        self.bricks["coord"][1] -= 1
+
+    def move_right(self):
+        self.bricks["coord"][1] += 1
+
+    def move_down(self):
+        self.bricks["coord"][0] -= 1
