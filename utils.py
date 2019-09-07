@@ -44,12 +44,24 @@ def calc_move(field_padding, bricks_cl):
     pad = cfg.PADDING
     f_shape = cfg.FIELD_SHAPE
     new_bricks = np.zeros(field.shape)
-    x_brick = cfg.FIELD_SHAPE[0] - bricks["coord"][0]
-    y_brick = bricks["coord"][1]
-    new_bricks[x_brick + pad: x_brick + 4 + pad, y_brick + pad: y_brick + 4 + pad] = \
+    x_brick = cfg.FIELD_SHAPE[0] - bricks["coord"][0] + pad
+    y_brick = bricks["coord"][1] + pad
+    new_bricks[x_brick: x_brick + 4, y_brick: y_brick + 4] = \
         bricks["bricks"][bricks["rotation"]]
 
     f_combine_field = field + new_bricks
     combine_field = f_combine_field[pad: pad + f_shape[0], \
         pad: pad + f_shape[1]]
     return combine_field, f_combine_field
+
+
+def clear_rows(field, sum_require=cfg.FIELD_SHAPE[1]):
+    """
+    """
+    new_f_render = np.zeros(field.shape)
+    f_row = field.shape[0] - 1
+    for i in range(field.shape[0] - 1, -1, -1):
+        if field[i].sum() != sum_require:
+            new_f_render[f_row] = field[i]
+            f_row -= 1
+    return new_f_render

@@ -10,25 +10,24 @@ class Field():
     the field contains a numpy array that represents the field.
     """
 
-    def __init__(self, shape=cfg.FIELD_SHAPE, padding=cfg.PADDING):
+    def __init__(self):
         """
-        default shape is (20, 10)
         """
-        self.padding_size = padding
-        self.field_render = np.zeros(shape)
-        self.field_padding = np.zeros((shape[0] + 2*padding, shape[1] + 2*padding))
+        self.padding_size = cfg.PADDING
+        self.field_render = np.zeros(cfg.FIELD_SHAPE)
+        self.field_padding = np.zeros((cfg.FIELD_SHAPE[0] + 2*cfg.PADDING, \
+            cfg.FIELD_SHAPE[1] + 2*cfg.PADDING))
 
     def add_bricks(self, bricks_cl):
         """
         when a brick hit the floor, it will be attached into the field
         """
-        self.field_render, self.field_padding = utils.calc_move(self.field_padding, bricks_cl)
+        self.field_render, self.field_padding = \
+            utils.calc_move(self.field_padding, bricks_cl)
 
-    def check_and_clear_a_row(self):
-        """
-        
-        """
-        pass
+    def check_and_clear_rows(self):
+        self.field_render = utils.clear_rows(self.field_render)
+        self.field_padding = utils.clear_rows(self.field_padding)
 
 
 class Bricks():
@@ -47,7 +46,7 @@ class Bricks():
                        "rotation": 0}
         self.random_brick()
         self.dumb_bricks = self.copy_bricks(self.bricks)
-        self.action_dict = {0       : self.do_nothing,
+        self.action_dict = {0:        self.do_nothing,
                             ord("w"): self.rotate,
                             ord("a"): self.move_left,
                             ord("d"): self.move_right,
