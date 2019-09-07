@@ -3,6 +3,7 @@ import time
 import game_objects as go
 import utils
 from threading import Thread
+import cfg
 
 
 window = curses.initscr()
@@ -15,7 +16,7 @@ bricks = go.Bricks()
 
 def func1():
     while True:
-        time.sleep(1)
+        time.sleep(cfg.TIME_SLEEP)
         global bricks, field, count
         bricks.control_brick(ord("s"))
         can_down = utils.check_valid(field, bricks)
