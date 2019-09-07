@@ -4,7 +4,7 @@ A tetris version coded by Python3. I use `numpy` and `curses` as the main packag
 
 <p align="center">
   <img src="https://media.giphy.com/media/hrFrcC8xh3jg5k80Oz/giphy.gif"><br>
-  <i>Infamous Chrome game</i>
+  <i>Demo game</i>
 </p>
 
 # Controls
