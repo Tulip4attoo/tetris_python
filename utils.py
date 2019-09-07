@@ -8,7 +8,36 @@ def create_screen(field_cl, bricks_cl):
     the screen
     """
     rows_rendered = []
-    # field = field_cl.field_render
+
+    combine_field = calc_move(field_cl, bricks_cl)
+    for row in combine_field:
+        row_rendered = ""
+        for i in row:
+            if i == 0:
+                row_rendered += "-"
+            else:
+                row_rendered += "*"
+        rows_rendered.append(row_rendered)
+    field_rendered = "\n".join(rows_rendered)
+    return field_rendered
+
+
+def check_valid(field_cl, bricks_cl):
+    """
+
+    """
+    field = np.array(field_cl.field_render, dtype=np.bool)
+    bricks = bricks_cl.bricks["bricks"][bricks_cl.bricks["rotation"]]
+    n_bricks = np.array(bricks, dtype=np.bool)
+    combine_field = np.array(calc_move(field_cl, bricks_cl), dtype=np.bool)
+    return field.sum() + bricks.sum() == combine_field.sum()
+
+
+def calc_move(field_cl, bricks_cl):
+    """
+    combine field and bricks into a string, that will be feed to render
+    the screen
+    """
     field = field_cl.field_padding
     bricks = bricks_cl.bricks
     pad = cfg.PADDING
@@ -22,13 +51,4 @@ def create_screen(field_cl, bricks_cl):
     combine_field = field + new_bricks
     combine_field = combine_field[pad: pad + f_shape[0], \
         pad: pad + field_cl.field_render.shape[1]]
-    for row in combine_field:
-        row_rendered = ""
-        for i in row:
-            if i == 0:
-                row_rendered += "-"
-            else:
-                row_rendered += "*"
-        rows_rendered.append(row_rendered)
-    field_rendered = "\n".join(rows_rendered)
-    return field_rendered
+    return combine_field

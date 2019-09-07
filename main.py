@@ -35,10 +35,21 @@ class Bricks():
                        "coord": coord,
                        "rotation": 0}
         self.random_brick()
-        self.action_dict = {ord("w"): self.rotate,
+        self.dumb_bricks = self.copy_bricks(self.bricks)
+        self.action_dict = {0       : self.do_nothing,
+                            ord("w"): self.rotate,
                             ord("a"): self.move_left,
                             ord("d"): self.move_right,
                             ord("s"): self.move_down}
+
+    def copy_bricks(self, brick_a):
+        """
+        return brick_a.copy()
+        """
+        new_bricks = {"bricks": brick_a["bricks"].copy(),
+                      "coord": brick_a["coord"].copy(),
+                      "rotation": brick_a["rotation"]}
+        return new_bricks
 
     def random_brick(self):
         bricks_list = bricks.BRICKS_LIST[:]
@@ -53,8 +64,18 @@ class Bricks():
         key is a number of ord(key)
         will refactor by adding into a dict of moveset later
         """
+        self.dumb_bricks = self.copy_bricks(self.bricks)
         action = self.action_dict[key]
         action()
+
+    def revert(self):
+        """
+        in case there is a invalid move, we can revert to previous state.
+        """
+        self.bricks = self.copy_bricks(self.dumb_bricks)
+
+    def do_nothing(self):
+        pass
 
     def rotate(self):
         """
