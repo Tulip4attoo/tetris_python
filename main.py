@@ -14,7 +14,7 @@ field = go.Field()
 bricks = go.Bricks()
 
 
-def func1():
+def auto_down():
     while True:
         time.sleep(cfg.TIME_SLEEP)
         global bricks, field, count
@@ -27,11 +27,10 @@ def func1():
             field.check_and_clear_rows()
         # render screen
         rendered = utils.create_screen(field, bricks)
-        # window.clear()
         window.refresh()
         window.addstr(0, 0, rendered)
 
-Thread(target=func1).start()
+Thread(target=auto_down).start()
 
 while True:
     # get key
