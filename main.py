@@ -10,29 +10,13 @@ class Field():
     the field contains a numpy array that represents the field.
     """
 
-    def __init__(self, shape=cfg.FIELD_SHAPE):
+    def __init__(self, shape=cfg.FIELD_SHAPE, padding=cfg.PADDING):
         """
         default shape is (20, 10)
         """
-        self.field = np.zeros(shape)
-        # self.field_rendered = self.render_field()
-
-    def render_field(self):
-        """
-        render self.field into a viewable field.
-        We change 0 into "-" and 1 into *
-        """
-        rows_rendered = []
-        for row in self.field:
-            row_rendered = ""
-            for i in row:
-                if i == 0:
-                    row_rendered += "-"
-                else:
-                    row_rendered += "*"
-            rows_rendered.append(row_rendered)
-        self.field_rendered = "\n".join(rows_rendered)
-        return self.field_rendered
+        self.padding_size = padding
+        self.field_render = np.zeros(shape)
+        self.field_padding = np.zeros((shape[0] + 2*padding, shape[1] + 2*padding))
 
 
 class Bricks():
@@ -51,6 +35,10 @@ class Bricks():
                        "coord": coord,
                        "rotation": 0}
         self.random_brick()
+        self.action_dict = {ord("w"): self.rotate,
+                            ord("a"): self.move_left,
+                            ord("d"): self.move_right,
+                            ord("s"): self.move_down}
 
     def random_brick(self):
         bricks_list = bricks.BRICKS_LIST[:]
@@ -65,14 +53,8 @@ class Bricks():
         key is a number of ord(key)
         will refactor by adding into a dict of moveset later
         """
-        if key == ord("w"):
-            self.rotate()
-        elif key == ord("a"):
-            self.move_left()
-        elif key == ord("d"):
-            self.move_right()
-        elif key == ord("s"):
-            self.move_down()
+        action = self.action_dict[key]
+        action()
 
     def rotate(self):
         """
