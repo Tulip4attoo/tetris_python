@@ -24,6 +24,25 @@ BRICKS_L = {
                  (0, 0, 0, 0)))
 }
 
+BRICKS_J = {
+    0: np.array(((0, 0, 0, 0),
+                 (0, 0, 1, 0),
+                 (0, 0, 1, 0),
+                 (0, 1, 1, 0))),
+    1: np.array(((0, 0, 0, 0),
+                 (0, 1, 0, 0),
+                 (0, 1, 1, 1),
+                 (0, 0, 0, 0))),
+    2: np.array(((0, 0, 0, 0),
+                 (0, 0, 1, 1),
+                 (0, 0, 1, 0),
+                 (0, 0, 1, 0))),
+    3: np.array(((0, 0, 0, 0),
+                 (0, 0, 0, 0),
+                 (0, 1, 1, 1),
+                 (0, 0, 0, 1)))
+}
+
 BRICKS_O = {
     0: np.array(((0, 0, 0, 0),
                  (0, 1, 1, 0),
@@ -120,4 +139,4 @@ BRICKS_T = {
 }
 
 BRICKS_LIST = [BRICKS_L, BRICKS_O, BRICKS_I, BRICKS_Z, \
-    BRICKS_S, BRICKS_T]
+    BRICKS_S, BRICKS_T, BRICKS_J]
