@@ -9,6 +9,9 @@ __pycache__/
 # test file
 test.py
 
+# not included folder
+tetris_bot/
+
 # vscode
 .vscode/*
 
