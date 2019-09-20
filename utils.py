@@ -90,12 +90,15 @@ def get_agg_height(field):
     col_heights = []
     field_transpose = field.transpose()
     for row in field_transpose:
+        trigger = True
         for i in range(len(row)):
             if row[i] != 0:
                 result += len(row) - i
                 col_heights.append(len(row) - i)
+                trigger = False
                 break
-        col_heights.append(0)
+        if trigger:
+            col_heights.append(0)
     return result, col_heights
 
 
@@ -151,9 +154,10 @@ def get_moveset(field_cl, brick_cl):
     """
     choose the moveset with the highest score
     """
-    score_list = []
-    for moveset in cfg.MOVESET_LIST:
-        score_list.append(score_a_moveset(field_cl, brick_cl, moveset))
+    score_list = [0] * len(cfg.MOVESET_LIST)
+    for ind in range(len(cfg.MOVESET_LIST)):
+        moveset = cfg.MOVESET_LIST[ind]
+        score_list[ind] = score_a_moveset(field_cl, brick_cl, moveset)
     # return the moveset with highest score in score_list
     moveset = cfg.MOVESET_LIST[score_list.index(max(score_list))]
     keys_list = [ord(i) for i in list(moveset)]

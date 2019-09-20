@@ -66,8 +66,9 @@ def move_set(keys_list):
         window.getch()
         move(key)
 
+# turnoff auto down in auto mode for testing
 
-Thread(target=auto_down).start()
+# Thread(target=auto_down).start()
 
 while True:
     window.getch()
