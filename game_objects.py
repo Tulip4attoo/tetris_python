@@ -46,7 +46,7 @@ class Bricks():
                        "rotation": 0}
         self.random_brick()
         self.dumb_bricks = self.copy_bricks(self.bricks)
-        self.action_dict = {0:        self.do_nothing,
+        self.action_dict = {-1:        self.do_nothing,
                             ord("w"): self.rotate,
                             ord("a"): self.move_left,
                             ord("d"): self.move_right,
@@ -69,7 +69,6 @@ class Bricks():
         self.bricks["rotation"] = random.choice([0, 1, 2, 3])
         return self.bricks
 
-    # def control_brick(self, key):
     def control_brick(self, key, field):
         """
         this function is to control the bricks, includes rotation= and move
@@ -78,7 +77,6 @@ class Bricks():
         """
         self.dumb_bricks = self.copy_bricks(self.bricks)
         action = self.action_dict[key]
-        # action()
         action(field)
 
     def revert(self):
@@ -87,11 +85,15 @@ class Bricks():
         """
         self.bricks = self.copy_bricks(self.dumb_bricks)
 
-    # def do_nothing(self):
+    def revert_to_state(self, state):
+        """
+        revert into a saved state
+        """
+        self.bricks = self.copy_bricks(state)
+
     def do_nothing(self, field):
         pass
 
-    # def rotate(self):
     def rotate(self, field):
         """
         this function is to change the rotation value in self.bricks
@@ -99,21 +101,16 @@ class Bricks():
         """
         self.bricks["rotation"] = (self.bricks["rotation"] + 1) % 4
 
-    # def move_left(self):
     def move_left(self, field):
         self.bricks["coord"][1] -= 1
 
-    # def move_right(self):
     def move_right(self, field):
         self.bricks["coord"][1] += 1
 
-    # def move_down(self):
     def move_down(self, field):
         self.bricks["coord"][0] -= 1
 
-    # def move_to_floor(self):
     def move_to_floor(self, field):
         while utils.check_valid(field, self):
             self.bricks["coord"][0] -= 1
         self.bricks["coord"][0] += 1
-
