@@ -162,17 +162,53 @@ def score_a_moveset(field_cl, brick_cl, moveset):
     return combine_score
 
 
+def render_a_moveset(field_cl, brick_cl, moveset):
+    """
+    a moveset is a string that contains the move, like: wwas
+    we create field_render and field_padding
+    """
+    move_list = [ord(i) for i in list(moveset)]
+    for move in move_list:
+        brick_cl.control_brick(move, field_cl)
+        valid = check_valid(field_cl, brick_cl)
+        if not valid:
+            brick_cl.revert()
+    new_f_render, new_f_padding = calc_move(field_cl.field_padding, brick_cl)
+
+    return new_f_render, new_f_padding
+
+
 def get_moveset(field_cl, brick_cl):
     """
     choose the moveset with the highest score
     """
-    score_list = [0] * len(cfg.MOVESET_LIST)
-    for ind in range(len(cfg.MOVESET_LIST)):
-        moveset = cfg.MOVESET_LIST[ind]
-        saved_state = brick_cl.copy_brick(brick_cl.brick)
-        score_list[ind] = score_a_moveset(field_cl, brick_cl, moveset)
-        brick_cl.revert_to_state(saved_state)
-    # return the moveset with highest score in score_list
+    s_list = []
+    for _ in range(len(cfg.MOVESET_LIST)):
+        s_list.append([0] * len(cfg.MOVESET_LIST))
+
+    saved_brick = brick_cl.copy_brick(brick_cl.brick)
+    saved_next_brick = brick_cl.copy_brick(brick_cl.next_brick)
+    saved_f_render = field_cl.field_render.copy()
+    saved_f_padding = field_cl.field_padding.copy()
+
+    for ind1 in range(len(cfg.MOVESET_LIST)):
+        moveset = cfg.MOVESET_LIST[ind1]
+        f_render, f_padding = render_a_moveset(field_cl, brick_cl, moveset)
+
+        for ind2 in range(len(cfg.MOVESET_LIST)):
+            moveset = cfg.MOVESET_LIST[ind2]
+            # brick_cl.create_new_brick()
+            brick_cl.brick = brick_cl.copy_brick(saved_next_brick)
+            field_cl.revert_to_state(f_render, f_padding)
+            s_list[ind1][ind2] = score_a_moveset(field_cl, brick_cl, moveset)
+
+            # brick_cl.revert_to_state(saved_next_brick, saved_next_brick)
+
+        field_cl.revert_to_state(saved_f_render, saved_f_padding)
+        brick_cl.revert_to_state(saved_brick, saved_next_brick)
+
+    # return the moveset with highest score in s_list
+    score_list = [max(i) for i in s_list]
     moveset = cfg.MOVESET_LIST[score_list.index(max(score_list))]
     keys_list = [ord(i) for i in list(moveset)]
     return keys_list

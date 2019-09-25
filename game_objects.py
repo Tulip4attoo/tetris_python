@@ -29,6 +29,10 @@ class Field():
         self.field_render = utils.clear_rows(self.field_render)
         self.field_padding = utils.clear_rows(self.field_padding)
 
+    def revert_to_state(self, f_render, f_padding):
+        self.field_render = f_render.copy()
+        self.field_padding = f_padding.copy()
+
 
 class Brick():
     """
@@ -100,11 +104,12 @@ class Brick():
         """
         self.brick = self.copy_brick(self.dumb_brick)
 
-    def revert_to_state(self, state):
+    def revert_to_state(self, saved_brick, saved_next_brick):
         """
         revert into a saved state
         """
-        self.brick = self.copy_brick(state)
+        self.brick = self.copy_brick(saved_brick)
+        self.next_brick = self.copy_brick(saved_next_brick)
 
     def do_nothing(self, field):
         pass
