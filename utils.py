@@ -4,14 +4,14 @@ import time
 import game_objects as go
 
 
-def create_screen(field_cl, bricks_cl):
+def create_screen(field_cl, brick_cl):
     """
-    combine field and bricks into a string, that will be feed to render
+    combine field and brick into a string, that will be feed to render
     the screen
     """
     rows_rendered = []
 
-    combine_field, _ = calc_move(field_cl.field_padding, bricks_cl)
+    combine_field, _ = calc_move(field_cl.field_padding, brick_cl)
     for row in combine_field:
         row_rendered = ""
         for i in row:
@@ -21,37 +21,51 @@ def create_screen(field_cl, bricks_cl):
                 row_rendered += "██"
         rows_rendered.append(row_rendered)
     field_rendered = "\n".join(rows_rendered)
+
+    # show the next brick
+    field_rendered += "\n\n"
+    rows_rendered = []
+    for row in brick_cl.next_brick["brick"][0]:
+        row_rendered = ""
+        for i in row:
+            if i == 0:
+                row_rendered += ". "
+            else:
+                row_rendered += "██"
+        rows_rendered.append(row_rendered)
+    field_rendered += "\n".join(rows_rendered)
+
     return field_rendered
 
 
-def check_valid(field_cl, bricks_cl):
+def check_valid(field_cl, brick_cl):
     """
 
     """
     field = np.array(field_cl.field_render, dtype=np.bool)
-    bricks = bricks_cl.bricks["bricks"][bricks_cl.bricks["rotation"]]
-    n_bricks = np.array(bricks, dtype=np.bool)
-    combine_field, _ = calc_move(field_cl.field_padding, bricks_cl)
+    brick = brick_cl.brick["brick"][brick_cl.brick["rotation"]]
+    n_brick = np.array(brick, dtype=np.bool)
+    combine_field, _ = calc_move(field_cl.field_padding, brick_cl)
     combine_field = np.array(combine_field, dtype=np.bool)
-    return field.sum() + bricks.sum() == combine_field.sum()
+    return field.sum() + brick.sum() == combine_field.sum()
 
 
-def calc_move(field_padding, bricks_cl):
+def calc_move(field_padding, brick_cl):
     """
     attached brick into field, get result as 2 numpy array
     field_render and field_padding
     """
     field = field_padding[:]
-    bricks = bricks_cl.bricks
+    brick = brick_cl.brick
     pad = cfg.PADDING
     f_shape = cfg.FIELD_SHAPE
-    new_bricks = np.zeros(field.shape)
-    x_brick = cfg.FIELD_SHAPE[0] - bricks["coord"][0] + pad
-    y_brick = bricks["coord"][1] + pad
-    new_bricks[x_brick: x_brick + 4, y_brick: y_brick + 4] = \
-        bricks["bricks"][bricks["rotation"]]
+    new_brick = np.zeros(field.shape)
+    x_brick = cfg.FIELD_SHAPE[0] - brick["coord"][0] + pad
+    y_brick = brick["coord"][1] + pad
+    new_brick[x_brick: x_brick + 4, y_brick: y_brick + 4] = \
+        brick["brick"][brick["rotation"]]
 
-    f_combine_field = field + new_bricks
+    f_combine_field = field + new_brick
     combine_field = f_combine_field[pad: pad + f_shape[0], \
         pad: pad + f_shape[1]]
     return combine_field, f_combine_field
@@ -136,7 +150,6 @@ def score_a_moveset(field_cl, brick_cl, moveset):
     a moveset is a string that contains the move, like: wwas
     """
     move_list = [ord(i) for i in list(moveset)]
-    saved_state = brick_cl.copy_bricks(brick_cl.bricks)
     for move in move_list:
         brick_cl.control_brick(move, field_cl)
         valid = check_valid(field_cl, brick_cl)
@@ -146,7 +159,6 @@ def score_a_moveset(field_cl, brick_cl, moveset):
     score_list = get_field_score(new_f_render)
     combine_score = calc_combine_score(score_list)
 
-    brick_cl.revert_to_state(saved_state)
     return combine_score
 
 
@@ -157,7 +169,9 @@ def get_moveset(field_cl, brick_cl):
     score_list = [0] * len(cfg.MOVESET_LIST)
     for ind in range(len(cfg.MOVESET_LIST)):
         moveset = cfg.MOVESET_LIST[ind]
+        saved_state = brick_cl.copy_brick(brick_cl.brick)
         score_list[ind] = score_a_moveset(field_cl, brick_cl, moveset)
+        brick_cl.revert_to_state(saved_state)
     # return the moveset with highest score in score_list
     moveset = cfg.MOVESET_LIST[score_list.index(max(score_list))]
     keys_list = [ord(i) for i in list(moveset)]
