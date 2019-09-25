@@ -16,9 +16,9 @@ def create_screen(field_cl, bricks_cl):
         row_rendered = ""
         for i in row:
             if i == 0:
-                row_rendered += "-"
+                row_rendered += ". "
             else:
-                row_rendered += "*"
+                row_rendered += "██"
         rows_rendered.append(row_rendered)
     field_rendered = "\n".join(rows_rendered)
     return field_rendered
