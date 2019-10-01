@@ -212,3 +212,34 @@ def get_moveset(field_cl, brick_cl):
     moveset = cfg.MOVESET_LIST[score_list.index(max(score_list))]
     keys_list = [ord(i) for i in list(moveset)]
     return keys_list
+
+
+def get_valid_position(field_cl, brick_cl):
+    """
+    return a dict
+    brick postion: [list of valid x postion]
+    """
+    pass
+
+
+def get_correct_rotation(brick_cl, keys_list):
+    """
+    """
+    pass
+
+
+def gen_1_data():
+    """
+    """
+    pass
+
+
+def gen_data(field_cl, brick_cl, keys_list):
+    """
+    """
+    correct_rotation = get_correct_rotation(brick_cl, keys_list)
+    valid_postion = get_valid_position(field_cl, brick_cl)
+    for rotation in valid_postion:
+        for position in valid_postion[rotation]:
+            gen_1_data()
+    pass
