@@ -217,9 +217,10 @@ def get_moveset(field_cl, brick_cl):
 def get_valid_position(field_cl, brick_cl):
     """
     return a dict
-    brick postion: [list of valid x postion]
+    {brick rotation: [list of valid x postion]}
     """
-    pass
+    for rotation in
+    brick_array = brick_cl
 
 
 def get_correct_rotation(brick_cl, keys_list):

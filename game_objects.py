@@ -78,14 +78,14 @@ class Brick():
         brick_list = bricks.BRICKS_LIST[:]
         random_brick = random.choice(brick_list)
         self.brick["brick"] = random_brick
-        self.brick["rotation"] = random.choice([0, 1, 2, 3])
+        self.brick["rotation"] = random.choice(range(len(random_brick)))
         return self.brick
 
     def random_next_brick(self):
         brick_list = bricks.BRICKS_LIST[:]
         random_brick = random.choice(brick_list)
         self.next_brick["brick"] = random_brick
-        self.next_brick["rotation"] = random.choice([0, 1, 2, 3])
+        self.next_brick["rotation"] = random.choice(range(len(random_brick)))
         return self.next_brick
 
     def control_brick(self, key, field):
